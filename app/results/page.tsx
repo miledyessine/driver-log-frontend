@@ -42,6 +42,8 @@ export default function ResultsPage() {
     const groupedSchedule = groupScheduleByDay(tripData.schedule.schedule);
 
     const handleExportPDF = async () => {
+        let previousTotalMiles = 0;
+
         const logData = Array.from(groupedSchedule.entries()).map(
             ([date, entries]) => {
                 // Format date as DD/MM/YYYY
@@ -49,12 +51,19 @@ export default function ResultsPage() {
                     "fr-FR"
                 );
 
+                // Calculate total miles for this day
+                const dayTotalMiles =
+                    entries.length > 0
+                        ? entries[entries.length - 1].miles_since_start -
+                          previousTotalMiles
+                        : 0;
+
+                // Update previous total for next iteration
+                previousTotalMiles += dayTotalMiles;
+
                 return {
                     date: formattedDate,
-                    totalMiles:
-                        entries.length > 0
-                            ? entries[entries.length - 1].miles_since_start
-                            : 0,
+                    totalMiles: dayTotalMiles,
                     entries,
                 };
             }

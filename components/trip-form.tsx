@@ -100,55 +100,59 @@ export function TripForm() {
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setIsLoading(true);
+    e.preventDefault();
+    setIsLoading(true);
 
-        try {
-            // Validate inputs
-            if (
-                !formData.current_location.lat ||
-                !formData.current_location.lng ||
-                !formData.pickup_location.lat ||
-                !formData.pickup_location.lng ||
-                !formData.dropoff_location.lat ||
-                !formData.dropoff_location.lng
-            ) {
-                toast("Invalid input", {
-                    description: "Please fill in all location coordinates",
-                });
-                setIsLoading(false);
-                return;
-            }
-
-            const response = await fetch(
-                `${process.env.NEXT_PUBLIC_API_URL}/api/plan-trip/`,
-                {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(formData),
-                }
-            );
-
-            if (!response.ok) throw new Error("API request failed");
-
-            const data = await response.json();
-            setTripData(data);
-
-            toast("Trip planned successfully", {
-                description: "Redirecting to results...",
+    try {
+        // Validate inputs
+        if (
+            !formData.current_location.lat ||
+            !formData.current_location.lng ||
+            !formData.pickup_location.lat ||
+            !formData.pickup_location.lng ||
+            !formData.dropoff_location.lat ||
+            !formData.dropoff_location.lng
+        ) {
+            toast("Invalid input", {
+                description: "Please fill in all location coordinates",
             });
-            router.push("/results");
-        } catch (error) {
-            console.log("API unavailable, using mock data");
-            setTripData({} as any); // Replace with your mock
-            toast("Using example data", {
-                description: "Backend API not available, showing example trip",
-            });
-            router.push("/results");
-        } finally {
             setIsLoading(false);
+            return;
         }
-    };
+
+        const response = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/api/plan-trip/`,
+            {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(formData),
+            }
+        );
+
+        if (!response.ok) {
+            // Show toast and stop navigation
+            const errMsg = await response.text();
+            toast.error(`API request failed: ${errMsg}`);
+            setIsLoading(false);
+            return;
+        }
+
+        const data = await response.json();
+        setTripData(data);
+
+        toast.success("Trip planned successfully, redirecting...");
+        router.push("/results");
+    } catch (error: any) {
+        console.error(error);
+        toast.error(
+            `Failed to plan trip: ${error.message || "Backend unavailable"}`
+        );
+        // Don't navigate
+    } finally {
+        setIsLoading(false);
+    }
+};
+
 
     return (
         <Card className="w-full max-w-2xl mx-auto shadow-xl border-border/50">
