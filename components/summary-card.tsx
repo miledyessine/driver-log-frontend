@@ -49,9 +49,9 @@ export function SummaryCard({ tripData }: { tripData: TripResponse }) {
                                     );
                                     return `${hrs
                                         .toString()
-                                        .padStart(2, "0")}:${mins
+                                        .padStart(2, "0")}h${mins
                                         .toString()
-                                        .padStart(2, "0")}`;
+                                        .padStart(2, "0")}min`;
                                 })()}
                             </p>
                         </div>
