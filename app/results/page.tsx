@@ -123,21 +123,21 @@ export default function ResultsPage() {
                     transition={{ duration: 0.5, delay: 0.3 }}
                     className="space-y-4"
                 >
-                    <Tabs defaultValue="timeline" className="w-full">
+                    <Tabs defaultValue="logs" className="w-full">
                         <TabsList className="grid w-full grid-cols-2 bg-muted/50">
-                            <TabsTrigger
-                                value="timeline"
-                                className="flex items-center gap-2"
-                            >
-                                <Clock className="h-4 w-4" />
-                                Timeline
-                            </TabsTrigger>
                             <TabsTrigger
                                 value="logs"
                                 className="flex items-center gap-2"
                             >
                                 <FileText className="h-4 w-4" />
                                 Daily Logs
+                            </TabsTrigger>
+                            <TabsTrigger
+                                value="timeline"
+                                className="flex items-center gap-2"
+                            >
+                                <Clock className="h-4 w-4" />
+                                Timeline
                             </TabsTrigger>
                         </TabsList>
 
