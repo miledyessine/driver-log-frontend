@@ -4,7 +4,7 @@ import { Geist, Geist_Mono } from "next/font/google"
 import "./globals.css"
 import { Navbar } from "@/components/navbar"
 import { Toaster } from "@/components/ui/sonner"
-
+import { SpeedInsights } from "@vercel/speed-insights/next"
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -29,7 +29,9 @@ export default function RootLayout({
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable} dark`}>
       <body className="font-sans antialiased bg-background text-foreground min-h-screen">
         <Navbar />
-        <main>{children}</main>
+        <main>{children}
+          <SpeedInsights />
+        </main>
         <Toaster />
       </body>
     </html>
