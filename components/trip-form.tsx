@@ -132,7 +132,7 @@ export function TripForm() {
         if (!response.ok) {
             // Show toast and stop navigation
             const errMsg = await response.text();
-            toast.error(`API request failed: ${errMsg}`);
+            toast.error(`Failed to plan trip`);
             setIsLoading(false);
             return;
         }
@@ -145,7 +145,7 @@ export function TripForm() {
     } catch (error: any) {
         console.error(error);
         toast.error(
-            `Failed to plan trip: ${error.message || "Backend unavailable"}`
+            `Failed to plan trip`
         );
         // Don't navigate
     } finally {
